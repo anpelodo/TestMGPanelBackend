@@ -110,11 +110,68 @@ module.exports = {
     return res.status(200).json({
       status: 200,
       payload: {
-        message: "Deleted",
         deleted,
       },
     });
   },
 
-  async update(req, res) {},
+  async update(req, res) {
+    const { _id, email, name } = req.body;
+
+    if (!email && !name) {
+      return res.status(400).json({
+        status: 400,
+        payload: {
+          message: "email and name doesn't exist",
+        },
+      });
+    }
+
+    // TODO Use correct HTTP status code
+    if (!_id) {
+      return res.status(400).json({
+        status: 400,
+        payload: {
+          message: "_id is mandatory",
+        },
+      });
+    }
+
+    if (!(await Subscriber.idExist(_id))) {
+      // TODO Use correct HTTP status code
+      return res.status(400).json({
+        status: 400,
+        payload: {
+          message: "this id isn't valid or doesn't exist",
+          _id,
+        },
+      });
+    }
+
+    // TODO Use correct HTTP status code
+    if (email && (await Subscriber.emailExist(email))) {
+      return res.status(400).json({
+        status: 400,
+        payload: {
+          message: "This email already exist:",
+          email,
+        },
+      });
+    }
+
+    await Subscriber.findByIdAndUpdate(_id, {
+      email,
+      name,
+    }).catch((error) => {
+      sendErrorMsg(error, res);
+    });
+
+    return res.status(200).json({
+      status: 200,
+      payload: {
+        message: "Updated",
+        _id,
+      },
+    });
+  },
 };
