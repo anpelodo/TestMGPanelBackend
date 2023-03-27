@@ -112,7 +112,9 @@ module.exports = {
   },
 
   async update(req, res) {
-    const { _id, email, name } = req.body;
+    let { _id, email, name } = req.body;
+
+    console.log({ email }, { name });
 
     if (!email && !name) {
       return res.status(400).json({
@@ -140,6 +142,13 @@ module.exports = {
           _id,
         },
       });
+    }
+
+    // In case of sending the same email of the subscriber
+    // in other words, the email doesn't change....
+    const subscriber = await Subscriber.findById(_id);
+    if (email === subscriber.email) {
+      email = undefined;
     }
 
     if (email && (await Subscriber.emailExist(email))) {
