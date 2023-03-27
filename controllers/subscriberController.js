@@ -42,6 +42,18 @@ module.exports = {
 
     if (!creationDate) creationDate = new Date();
 
+    // TODO Use correct HTTP status code
+    if (!email || !name) {
+      return res.status(400).json({
+        status: 400,
+        payload: {
+          message: "'email' and 'name' are obligatory",
+          email,
+          name,
+        },
+      });
+    }
+
     const subscriber = await Subscriber.create({
       email,
       name,
