@@ -54,6 +54,17 @@ module.exports = {
       });
     }
 
+    // TODO Use correct HTTP status code
+    if (await Subscriber.emailExist(email)) {
+      return res.status(400).json({
+        status: 400,
+        payload: {
+          message: "This email already exist:",
+          email,
+        },
+      });
+    }
+
     const subscriber = await Subscriber.create({
       email,
       name,
