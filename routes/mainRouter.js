@@ -1,8 +1,11 @@
 const express = require("express");
 const path = require("path");
-const router = express.Router();
+const apiRouter = require("./apiV1Router");
 
+const router = express.Router();
 const rootDir = path.resolve(__dirname, "../");
+
+router.use("/api/v1/", apiRouter);
 
 router.use(express.static(path.join(rootDir, "public")));
 
