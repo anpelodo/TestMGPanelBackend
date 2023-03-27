@@ -37,7 +37,24 @@ module.exports = {
     }
   },
 
-  async add(req, res) {},
+  async add(req, res) {
+    let { email, name, creationDate } = req.body;
+
+    if (!creationDate) creationDate = new Date();
+
+    const subscriber = await Subscriber.create({
+      email,
+      name,
+      creationDate,
+    }).catch((error) => {
+      return sendErrorMsg(error, res);
+    });
+
+    return res.status(200).json({
+      status: 200,
+      payload: subscriber,
+    });
+  },
 
   async delete(req, res) {},
 
