@@ -42,7 +42,6 @@ module.exports = {
 
     if (!creationDate) creationDate = new Date();
 
-    // TODO Use correct HTTP status code
     if (!email || !name) {
       return res.status(400).json({
         status: 400,
@@ -54,7 +53,6 @@ module.exports = {
       });
     }
 
-    // TODO Use correct HTTP status code
     if (await Subscriber.emailExist(email)) {
       return res.status(400).json({
         status: 400,
@@ -73,8 +71,8 @@ module.exports = {
       return sendErrorMsg(error, res);
     });
 
-    return res.status(200).json({
-      status: 200,
+    return res.status(201).json({
+      status: 201,
       payload: subscriber,
     });
   },
@@ -82,18 +80,16 @@ module.exports = {
   async delete(req, res) {
     const { _id } = req.body;
 
-    // TODO Use correct HTTP status code
     if (!_id) {
       return res.status(400).json({
         status: 400,
         payload: {
-          message: "_id is mandatory",
+          message: "_id doesn't exist",
         },
       });
     }
 
     if (!(await Subscriber.idExist(_id))) {
-      // TODO Use correct HTTP status code
       return res.status(400).json({
         status: 400,
         payload: {
@@ -127,18 +123,16 @@ module.exports = {
       });
     }
 
-    // TODO Use correct HTTP status code
     if (!_id) {
       return res.status(400).json({
         status: 400,
         payload: {
-          message: "_id is mandatory",
+          message: "_id doesn't exist",
         },
       });
     }
 
     if (!(await Subscriber.idExist(_id))) {
-      // TODO Use correct HTTP status code
       return res.status(400).json({
         status: 400,
         payload: {
@@ -148,7 +142,6 @@ module.exports = {
       });
     }
 
-    // TODO Use correct HTTP status code
     if (email && (await Subscriber.emailExist(email))) {
       return res.status(400).json({
         status: 400,
