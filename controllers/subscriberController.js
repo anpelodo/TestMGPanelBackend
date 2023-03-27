@@ -79,7 +79,42 @@ module.exports = {
     });
   },
 
-  async delete(req, res) {},
+  async delete(req, res) {
+    const { _id } = req.body;
+
+    // TODO Use correct HTTP status code
+    if (!_id) {
+      return res.status(400).json({
+        status: 400,
+        payload: {
+          message: "_id is mandatory",
+        },
+      });
+    }
+
+    if (!(await Subscriber.idExist(_id))) {
+      // TODO Use correct HTTP status code
+      return res.status(400).json({
+        status: 400,
+        payload: {
+          message: "this id isn't valid or doesn't exist",
+          _id,
+        },
+      });
+    }
+
+    const deleted = await Subscriber.findByIdAndDelete(_id).catch((error) => {
+      sendErrorMsg(error, res);
+    });
+
+    return res.status(200).json({
+      status: 200,
+      payload: {
+        message: "Deleted",
+        deleted,
+      },
+    });
+  },
 
   async update(req, res) {},
 };

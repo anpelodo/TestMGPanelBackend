@@ -26,6 +26,13 @@ subscriberSchema.statics.emailExist = async function (email) {
   return val > 0;
 };
 
+subscriberSchema.statics.idExist = async function (id) {
+  const val = await this.findById(id)
+    .exec()
+    .catch(() => null);
+  return val != null;
+};
+
 const Subscriber = mongoose.model("Subscriber", subscriberSchema);
 Subscriber.createCollection();
 
